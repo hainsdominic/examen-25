@@ -29,18 +29,18 @@ const angularApp = new AngularNodeAppEngine();
 app.get('/api/**', async (req, res) => {
   const path = req.path.replace(/^\/api\//, '');
   try {
-    const rep = await fetch(`http://localhost:8080/${path}`)
+    const rep = await fetch(`http://localhost:8080/${path}`);
     if (rep.ok) {
       if (rep.headers.get('Content-Type')?.includes('application/json')) {
-        res.json(await rep.json())
+        res.json(await rep.json());
       } else if (rep.headers.get('Content-Type')?.includes('text/html')) {
-        res.send(await rep.text())
+        res.send(await rep.text());
       } else if (rep.headers.get('Content-Type')?.includes('blob')) {
-        res.send(await rep.blob())
+        res.send(await rep.blob());
       } else if (rep.headers.get('Content-Type')?.includes('text/plain')) {
-        res.send(await rep.text())
+        res.send(await rep.text());
       } else {
-        res.send(await rep.text())
+        res.send(await rep.text());
       }
     }
   } catch (error: any) {
@@ -56,7 +56,7 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
-  }),
+  })
 );
 
 /**
@@ -66,7 +66,7 @@ app.use('/**', (req, res, next) => {
   angularApp
     .handle(req)
     .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
+      response ? writeResponseToNodeResponse(response, res) : next()
     )
     .catch(next);
 });

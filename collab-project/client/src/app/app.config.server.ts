@@ -9,8 +9,8 @@ const serverConfig: ApplicationConfig = {
   providers: [
     provideServerRendering(),
     provideServerRoutesConfig(serverRoutes),
-    provideHttpClient(withFetch())
-  ]
+    provideHttpClient(withFetch()),
+  ],
 };
 
 export const config = mergeApplicationConfig(appConfig, serverConfig);
