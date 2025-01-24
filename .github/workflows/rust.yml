@@ -1,0 +1,32 @@
+name: Rust Axum Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: mirlahiji/rust-action@master
+        with:
+          args: cd packages/aurore && cargo fmt -- --check && cargo clippy -- -Dwarnings && cargo test
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          components: llvm-tools-preview
+
+      - uses: Swatinem/fucov@v1
+
+      - uses: codecov/codecov-action@v1
+        with:
+          directory: coverage
+
+      - name: Create Release Tag
+        id: create_release_tag
+        run: echo ::set-output name=tag::v$(date +'%Y%m%d%H%M%S')
+
+      - name: Build Dockerfile (its in the repo under ci-cd/Dockerfile)
+        run: docker build -t . -f ci-cd/Dockerfile .
